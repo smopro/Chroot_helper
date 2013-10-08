@@ -31,7 +31,7 @@ mount --bind /proc "${CHROOT_DIRECTORY_NAME}/proc"
 mount --bind /sys "${CHROOT_DIRECTORY_NAME}/sys"
 mount --bind /run "${CHROOT_DIRECTORY_NAME}/run"
 
-chroot "${CHROOT_DIRECTORY_NAME}"
+chroot "${CHROOT_DIRECTORY_NAME}" /bin/sh
 
 # 正常結束script程式
 exit 0
