@@ -13,7 +13,7 @@ http://www.gnu.org/licenses/lgpl.html
 
 Chroot Helper
 ===========
-Scripts to help you chroot a device.
+Scripts to help you chroot a Unix system.
 
 License Declaration
 ------------------
