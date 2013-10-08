@@ -27,14 +27,13 @@
 # Load common settings
 source Common_settings.source.sh
 
-umount "${CHROOT_DIRECTORY_NAME}/dev/pts"
-umount "${CHROOT_DIRECTORY_NAME}/dev"
-umount "${CHROOT_DIRECTORY_NAME}/proc"
-umount "${CHROOT_DIRECTORY_NAME}/sys"
-umount "${CHROOT_DIRECTORY_NAME}/run"
+umount "${CHROOT_MOUNTPOINT_NAME}/dev/pts"
+umount "${CHROOT_MOUNTPOINT_NAME}/dev"
+umount "${CHROOT_MOUNTPOINT_NAME}/proc"
+umount "${CHROOT_MOUNTPOINT_NAME}/sys"
 
-umount "${CHROOT_DIRECTORY_NAME}"
-rmdir "${CHROOT_DIRECTORY_NAME}"
+umount "${CHROOT_MOUNTPOINT_NAME}"
+rmdir "${CHROOT_MOUNTPOINT_NAME}"
 
 # 正常結束script程式
 exit 0

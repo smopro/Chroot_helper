@@ -27,17 +27,19 @@
 # Load common settings
 source Common_settings.source.sh
 
-mkdir --parents "${CHROOT_DIRECTORY_NAME}"
+# Prepare root filesystem mountpoint
+mkdir --parents "${CHROOT_MOUNTPOINT_NAME}"
+mount --options "${CHROOT_TARGET_MOUNT_OPTIONS}" "${CHROOT_TARGET}" "${CHROOT_MOUNTPOINT_NAME}"
+cd "${CHROOT_MOUNTPOINT_NAME}"
 
-mount "${CHROOT_PARTITION}" "${CHROOT_DIRECTORY_NAME}"
+# Prepare special directory
+mount --options bind /dev dev
+mount --types devpts pts dev/pts
+mount --types proc proc proc
+mount --types sysfs sys sys
 
-mount --bind /dev "${CHROOT_DIRECTORY_NAME}/dev"
-mount --bind /dev/pts "${CHROOT_DIRECTORY_NAME}/dev/pts"
-mount --bind /proc "${CHROOT_DIRECTORY_NAME}/proc"
-mount --bind /sys "${CHROOT_DIRECTORY_NAME}/sys"
-mount --bind /run "${CHROOT_DIRECTORY_NAME}/run"
-
-chroot "${CHROOT_DIRECTORY_NAME}" /bin/sh
+# Change root to target system
+chroot . /bin/sh
 
 # 正常結束script程式
 exit 0
