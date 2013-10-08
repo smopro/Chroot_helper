@@ -3,7 +3,7 @@
 ####################################################
 # Script程式名稱
 # Script Name
-# 	unchroot_filesystem.sh
+# 	Script to unmount all previously mounted filesystems and clean-up
 # 著作權宣告
 # Copyright Declaration
 # 	Ｖ字龍(Vdragon) <pika1021@gmail.com> (c) 2012
