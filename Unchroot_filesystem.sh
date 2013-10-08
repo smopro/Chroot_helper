@@ -17,11 +17,11 @@
 # 		正常結束
 # 已知問題
 # Known Issues
-# 	Known issues is now on GitHub
+# 	Known issues is now tracked on GitHub
 # 	
 # 修訂紀錄
 # Changelog
-# 	Changelog is now on GitHub
+# 	Changelog is now tracked using Git repostiory commit log
 # 	
 ###################################################
 # Load common settings
