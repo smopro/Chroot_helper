@@ -34,6 +34,7 @@ umount "${CHROOT_DIRECTORY_NAME}/sys"
 umount "${CHROOT_DIRECTORY_NAME}/run"
 
 umount "${CHROOT_DIRECTORY_NAME}"
+rmdir "${CHROOT_DIRECTORY_NAME}"
 
 # 正常結束script程式
 exit 0
