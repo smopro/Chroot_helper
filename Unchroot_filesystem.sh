@@ -31,6 +31,7 @@ umount "${CHROOT_MOUNTPOINT_NAME}/dev/pts"
 umount "${CHROOT_MOUNTPOINT_NAME}/dev"
 umount "${CHROOT_MOUNTPOINT_NAME}/proc"
 umount "${CHROOT_MOUNTPOINT_NAME}/sys"
+umount "${CHROOT_MOUNTPOINT_NAME}/run"
 
 umount "${CHROOT_MOUNTPOINT_NAME}"
 rmdir "${CHROOT_MOUNTPOINT_NAME}"

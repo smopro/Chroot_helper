@@ -37,6 +37,8 @@ mount --options bind /dev dev
 mount --types devpts pts dev/pts
 mount --types proc proc proc
 mount --types sysfs sys sys
+mount --types tmpfs tmpfs run
+mkdir --parents run/lock
 
 # Change root to target system
 chroot . /bin/sh
