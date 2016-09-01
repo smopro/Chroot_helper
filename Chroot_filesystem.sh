@@ -40,14 +40,14 @@ main() {
 
 	# Prepare root filesystem mountpoint
 	mkdir --parents "${PROGRAM_DIRECTORY}/${CHROOT_MOUNTPOINT_NAME}"
-	mount --options "${CHROOT_TARGET_MOUNT_OPTIONS}" "${CHROOT_TARGET_DEVICE}" "${PROGRAM_DIRECTORY}/${CHROOT_MOUNTPOINT_NAME}" "${CHROOT_MOUNTPOINT_PATH}"
+	mount --options "${CHROOT_TARGET_MOUNT_OPTIONS}" "${CHROOT_TARGET_DEVICE}" "${CHROOT_MOUNTPOINT_PATH}" || true
 
 	# Prepare special directory
-	mount --options bind /dev "${CHROOT_MOUNTPOINT_PATH}/dev"
-	mount --types devpts pts "${CHROOT_MOUNTPOINT_PATH}/dev/pts"
-	mount --types proc proc "${CHROOT_MOUNTPOINT_PATH}/proc"
-	mount --types sysfs sys "${CHROOT_MOUNTPOINT_PATH}/sys"
-	mount --types tmpfs tmpfs "${CHROOT_MOUNTPOINT_PATH}/run"
+	mount --options bind /dev "${CHROOT_MOUNTPOINT_PATH}/dev" || true
+	mount --types devpts pts "${CHROOT_MOUNTPOINT_PATH}/dev/pts" || true
+	mount --types proc proc "${CHROOT_MOUNTPOINT_PATH}/proc" || true
+	mount --types sysfs sys "${CHROOT_MOUNTPOINT_PATH}/sys" || true
+	mount --types tmpfs tmpfs "${CHROOT_MOUNTPOINT_PATH}/run" || true
 	mkdir --parents "${CHROOT_MOUNTPOINT_PATH}/run/lock"
 
 	# Change root to target system

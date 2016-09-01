@@ -33,13 +33,12 @@ source Common_settings.source.sh
 main() {
 	declare CHROOT_MOUNTPOINT_PATH="${PROGRAM_DIRECTORY}/${CHROOT_MOUNTPOINT_NAME}"
 
-	umount "${CHROOT_MOUNTPOINT_PATH}/dev/pts"
-	umount "${CHROOT_MOUNTPOINT_PATH}/dev"
-	umount "${CHROOT_MOUNTPOINT_PATH}/proc"
-	umount "${CHROOT_MOUNTPOINT_PATH}/sys"
-	umount "${CHROOT_MOUNTPOINT_PATH}/run"
-
-	umount "${CHROOT_MOUNTPOINT_PATH}"
+	umount "${CHROOT_MOUNTPOINT_PATH}/dev/pts" || true
+	umount "${CHROOT_MOUNTPOINT_PATH}/dev" || true
+	umount "${CHROOT_MOUNTPOINT_PATH}/proc" || true
+	umount "${CHROOT_MOUNTPOINT_PATH}/sys" || true
+	umount "${CHROOT_MOUNTPOINT_PATH}/run" || true
+	umount "${CHROOT_MOUNTPOINT_PATH}" || true
 	rmdir "${CHROOT_MOUNTPOINT_PATH}"
 
 	# 正常結束script程式
