@@ -1,47 +1,71 @@
-#!/bin/bash
-# 上一句用來宣告執行script用的shell
-####################################################
-# Script程式名稱
-# Script Name
-# 	Script to chroot into a target system
-# 著作權宣告
-# Copyright Declaration
-# 	Ｖ字龍(Vdragon) <pika1021@gmail.com> (c) 2012, 2013
-# 授權條款宣告
-# License Declaration
-# 	GNU Lesser General Public License version 3.0 or later
-# 	http://www.gnu.org/licenses/lgpl.html
-# 傳回值定義
-# Return Value Definition
-# 	0
-# 		正常結束
-# 已知問題
-# Known Issues
-# 	Known issues is now tracked on GitHub
-# 	
-# 修訂紀錄
-# Changelog
-# 	Changelog is now tracked using Git repostiory commit log
-# 	
-###################################################
+#!/usr/bin/env bash
+# 上列為宣告執行 script 程式用的殼程式(shell)的 shebang
+# Chroot_filesystem.sh - Script to chroot into a target system
+# Ｖ字龍(Vdragon) <Vdragon.Taiwan@gmail.com> (c) 2012~2016
+######## File scope variable definitions ########
+# Defensive Bash Programming - not-overridable primitive definitions
+# http://www.kfirlavi.com/blog/2012/11/14/defensive-bash-programming/
+declare -r PROGRAM_FILENAME="$(basename "$0")"
+declare -r PROGRAM_DIRECTORY="$(realpath --no-symlinks "$(dirname "$0")")"
+declare -r PROGRAM_ARGUMENT_ORIGINAL_LIST="$@"
+declare -r PROGRAM_ARGUMENT_ORIGINAL_NUMBER=$#
+
+## Unofficial Bash Script Mode
+## http://redsymbol.net/articles/unofficial-bash-strict-mode/
+# 將未定義的變數的參考視為錯誤
+set -u
+
+# Exit immediately if a pipeline, which may consist of a single simple command, a list, or a compound command returns a non-zero status.  The shell does not exit if the command that fails is part of the command list immediately following a `while' or `until' keyword, part of the test in an `if' statement, part of any command executed in a `&&' or `||' list except the command following the final `&&' or `||', any command in a pipeline but the last, or if the command's return status is being inverted with `!'.  If a compound command other than a subshell returns a non-zero status because a command failed while `-e' was being ignored, the shell does not exit.  A trap on `ERR', if set, is executed before the shell exits.
+set -e
+
+# If set, the return value of a pipeline is the value of the last (rightmost) command to exit with a non-zero status, or zero if all commands in the pipeline exit successfully.
+set -o pipefail
+
+# Variables
+declare AVAILABLE_SHELL="/bin/sh"
+
+# Definitions
+
+######## File scope variable definitions ended ########
+######## Included files ########
 # Load common settings
 source Common_settings.source.sh
 
-# Prepare root filesystem mountpoint
-mkdir --parents "${CHROOT_MOUNTPOINT_NAME}"
-mount --options "${CHROOT_TARGET_MOUNT_OPTIONS}" "${CHROOT_TARGET}" "${CHROOT_MOUNTPOINT_NAME}"
-cd "${CHROOT_MOUNTPOINT_NAME}"
+######## Included files ended ########
+######## Program ########
+# Defensive Bash Programming - main function, program entry point
+# http://www.kfirlavi.com/blog/2012/11/14/defensive-bash-programming/
+main() {
+	declare CHROOT_MOUNTPOINT_PATH="${PROGRAM_DIRECTORY}/${CHROOT_MOUNTPOINT_NAME}"
 
-# Prepare special directory
-mount --options bind /dev dev
-mount --types devpts pts dev/pts
-mount --types proc proc proc
-mount --types sysfs sys sys
-mount --types tmpfs tmpfs run
-mkdir --parents run/lock
+	# Prepare root filesystem mountpoint
+	mkdir --parents "${PROGRAM_DIRECTORY}/${CHROOT_MOUNTPOINT_NAME}"
+	mount --options "${CHROOT_TARGET_MOUNT_OPTIONS}" "${CHROOT_TARGET_DEVICE}" "${PROGRAM_DIRECTORY}/${CHROOT_MOUNTPOINT_NAME}" "${CHROOT_MOUNTPOINT_PATH}"
 
-# Change root to target system
-chroot . /bin/sh
+	# Prepare special directory
+	mount --options bind /dev "${CHROOT_MOUNTPOINT_PATH}/dev"
+	mount --types devpts pts "${CHROOT_MOUNTPOINT_PATH}/dev/pts"
+	mount --types proc proc "${CHROOT_MOUNTPOINT_PATH}/proc"
+	mount --types sysfs sys "${CHROOT_MOUNTPOINT_PATH}/sys"
+	mount --types tmpfs tmpfs "${CHROOT_MOUNTPOINT_PATH}/run"
+	mkdir --parents "${CHROOT_MOUNTPOINT_PATH}/run/lock"
 
-# 正常結束script程式
-exit 0
+	# Change root to target system
+	if [ -x "${CHROOT_MOUNTPOINT_PATH}/bin/bash" ]; then
+		AVAILABLE_SHELL=/bin/bash
+	elif [ -x "${CHROOT_MOUNTPOINT_PATH}/usr/bin/bash" ]; then
+		AVAILABLE_SHELL=/usr/bin/bash
+	elif [ -x "${CHROOT_MOUNTPOINT_PATH}/bin/sh" ]; then
+		AVAILABLE_SHELL=/bin/sh
+	elif [ -x "${CHROOT_MOUNTPOINT_PATH}/usr/bin/sh" ]; then
+		AVAILABLE_SHELL=/usr/bin/sh
+	fi
+
+	chroot "${CHROOT_MOUNTPOINT_PATH}" "$AVAILABLE_SHELL"
+
+	# 正常結束 script 程式
+	exit 0
+}
+main
+
+######## Program ended ########
