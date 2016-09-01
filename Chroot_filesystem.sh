@@ -49,7 +49,11 @@ main() {
 	mount --types sysfs sys "${CHROOT_MOUNTPOINT_PATH}/sys" || true
 	mount --types tmpfs tmpfs "${CHROOT_MOUNTPOINT_PATH}/run" || true
 	mkdir --parents "${CHROOT_MOUNTPOINT_PATH}/run/lock"
-
+	
+	# Setup manual DNS settings
+	mkdir --parents "${CHROOT_MOUNTPOINT_PATH}/run/resolvconf"
+	cp /etc/resolv.conf "${CHROOT_MOUNTPOINT_PATH}/run/resolvconf"
+	
 	# Change root to target system
 	if [ -x "${CHROOT_MOUNTPOINT_PATH}/bin/bash" ]; then
 		AVAILABLE_SHELL=/bin/bash
