@@ -43,10 +43,9 @@ main() {
 	mount --options "${CHROOT_TARGET_MOUNT_OPTIONS}" "${CHROOT_TARGET_DEVICE}" "${CHROOT_MOUNTPOINT_PATH}" || true
 
 	# Prepare special directory
-	mount --options bind /dev "${CHROOT_MOUNTPOINT_PATH}/dev" || true
-	mount --types devpts pts "${CHROOT_MOUNTPOINT_PATH}/dev/pts" || true
-	mount --types proc proc "${CHROOT_MOUNTPOINT_PATH}/proc" || true
-	mount --types sysfs sys "${CHROOT_MOUNTPOINT_PATH}/sys" || true
+	mount --rbind /dev "${CHROOT_MOUNTPOINT_PATH}/dev" || true
+	mount --rbind /proc "${CHROOT_MOUNTPOINT_PATH}/proc" || true
+	mount --rbind /sys "${CHROOT_MOUNTPOINT_PATH}/sys" || true
 	mount --types tmpfs tmpfs "${CHROOT_MOUNTPOINT_PATH}/run" || true
 	mkdir --parents "${CHROOT_MOUNTPOINT_PATH}/run/lock"
 	
